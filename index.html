@@ -1,324 +1,624 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taimimos - Presentes Personalizados</title>
-    <link rel="icon" type="image/png" href="logotipo.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Truculenta:opsz,wght@12..72,400;700;900&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>
-        /* Estilos personalizados para aplicar a fonte Truculenta */
-        body {
-            font-family: 'Truculenta', sans-serif;
-            /* Fundo principal do site */
-            background-image: url('background.png');
-            background-size: cover; /* Garante que a imagem cubra toda a área. */
-            background-position: center center; /* Centraliza a imagem. */
-            background-repeat: no-repeat;
-            background-attachment: fixed; /* Mantém a imagem fixa durante a rolagem. */
-            scroll-behavior: smooth;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taimimos — Presentes Personalizados</title>
+<link rel="icon" type="image/png" href="logotipo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-        /* Transição de carregamento da página */
-        .page-container {
-            animation: fadeIn 0.8s ease-in-out;
-        }
+<style>
+:root {
+  --gold:     #C9973A;
+  --gold-lt:  #F0C76A;
+  --gold-glow:#F0C76A44;
+  --rose:     #E8748A;
+  --rose-lt:  #FADADD;
+  --cream:    #FDF6EE;
+  --ink:      #1E1410;
+  --muted:    #7A6A5A;
+  --white:    #FFFFFF;
+  --card-bg:  #FFFAF5;
+  --nav-h:    72px;
+  --ease:     cubic-bezier(.23,1,.32,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden;cursor:none;}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* CURSOR */
+#cur,#cur-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);border-radius:50%;transition-property:width,height,background,opacity;transition-duration:.12s;}
+#cur{width:10px;height:10px;background:var(--gold);}
+#cur-ring{width:34px;height:34px;border:1.5px solid var(--gold);opacity:.55;transition-duration:.22s;}
 
-        /* Definições de cores personalizadas */
-        .brand-text { color: #2C3E50; }
-        .brand-yellow { background-color: #FDE68A; }
-        
-        h1, h2, h3 {
-            font-weight: 700; /* Peso mais forte para títulos com Truculenta */
-        }
+/* LOADER */
+#loader{position:fixed;inset:0;z-index:99990;background:linear-gradient(145deg,#FFF5F8 0%,#FFFBF0 50%,#F5F5FF 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;transition:opacity .9s var(--ease),visibility .9s var(--ease);}
+#loader.out{opacity:0;visibility:hidden;}
+.ldr-bf{animation:ldrFloat 2.2s ease-in-out infinite;}
+@keyframes ldrFloat{0%,100%{transform:translateY(0) rotate(-4deg);}50%{transform:translateY(-22px) rotate(4deg);}}
+.ldr-wl{transform-origin:100% 50%;animation:flapL .32s ease-in-out infinite alternate;}
+.ldr-wr{transform-origin:0% 50%;animation:flapR .32s ease-in-out infinite alternate;}
+@keyframes flapL{from{transform:scaleX(1);}to{transform:scaleX(.18);}}
+@keyframes flapR{from{transform:scaleX(1);}to{transform:scaleX(.18);}}
+.ldr-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:700;color:var(--ink);letter-spacing:.06em;opacity:0;animation:fadeUp .8s 1.4s forwards;}
+.ldr-sub{font-size:.85rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:0;animation:fadeUp .8s 1.7s forwards;}
+.ldr-bar{width:120px;height:2px;background:#e8e0d8;border-radius:2px;overflow:hidden;opacity:0;animation:fadeUp .8s 2s forwards;}
+.ldr-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-lt),var(--rose));animation:fillBar 2.4s ease forwards;}
+@keyframes fillBar{from{width:0;}to{width:100%;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-        /* Seção Hero - agora com a imagem das canecas como fundo */
-        .hero-section-with-bg {
-            position: relative;
-            min-height: 500px; /* Altura mínima para a seção. */
-            display: flex;
-            align-items: center; /* Centraliza o conteúdo verticalmente */
-            justify-content: center; /* Centraliza o conteúdo horizontalmente */
-            background-image: url('canecas.png'); /* ATUALIZADO: Imagem das canecas no topo */
-            background-size: cover; /* ATUALIZADO: Estica a imagem para cobrir a área */
-            background-position: center;
-        }
+/* SIDE DRAWER */
+#veil{position:fixed;inset:0;background:rgba(20,12,6,.55);z-index:8000;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;backdrop-filter:blur(4px);}
+#veil.on{opacity:1;visibility:visible;}
+#drawer{position:fixed;top:0;right:-100%;width:min(380px,94vw);height:100%;z-index:8001;background:var(--white);display:flex;flex-direction:column;transition:right .48s var(--ease);box-shadow:-12px 0 60px rgba(0,0,0,.18);}
+#drawer.on{right:0;}
+.drawer-header{padding:2rem 2rem 1.5rem;background:linear-gradient(135deg,#FFF5F8 0%,#FFFBF0 100%);border-bottom:1px solid #f0e8e0;display:flex;align-items:center;gap:1rem;position:relative;}
+.drawer-header img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);box-shadow:0 4px 14px var(--gold-glow);}
+.drawer-brand{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--ink);}
+.drawer-brand small{display:block;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--muted);font-weight:400;letter-spacing:.12em;text-transform:uppercase;}
+.drawer-x{position:absolute;top:1.4rem;right:1.4rem;background:none;border:none;cursor:pointer;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1.2rem;transition:background .2s,transform .25s;}
+.drawer-x:hover{background:#f0e8e0;transform:rotate(90deg);}
+.drawer-nav{flex:1;padding:1.5rem 1.2rem;display:flex;flex-direction:column;gap:.3rem;overflow-y:auto;}
+.drawer-nav a{display:flex;align-items:center;gap:1rem;padding:.95rem 1.2rem;color:var(--ink);text-decoration:none;font-weight:500;font-size:1.05rem;border-radius:14px;transition:background .2s,transform .2s,color .2s;}
+.drawer-nav a .ico{width:38px;height:38px;border-radius:10px;background:var(--rose-lt);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:background .2s,transform .2s;}
+.drawer-nav a:hover{background:var(--cream);transform:translateX(6px);}
+.drawer-nav a:hover .ico{background:var(--gold-lt);transform:scale(1.1);}
+.drawer-footer{padding:1.5rem 2rem;border-top:1px solid #f0e8e0;display:flex;gap:1rem;}
+.drawer-footer a{flex:1;display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem;border-radius:12px;text-decoration:none;font-size:.85rem;font-weight:700;transition:transform .2s,box-shadow .2s;}
+.drawer-footer a:hover{transform:translateY(-2px);}
+.drawer-ig{background:#fce4ec;color:#c2185b;}
+.drawer-wa{background:#e8f5e9;color:#2e7d32;}
 
-        /* Ajustes para o conteúdo dentro da Seção Hero */
-        .hero-content {
-            position: relative;
-            z-index: 10;
-        }
-        
-        /* Media queries para ajustes em telas menores */
-        @media (max-width: 768px) { /* Celular / Mobile */
-            .hero-section-with-bg {
-                min-height: 450px; /* Altura ajustada para mobile */
-                padding: 2rem 0;
-            }
-            .hero-content {
-                 text-align: center; /* Centraliza o texto no celular */
-            }
-            h1.brand-text {
-                font-size: 3.5rem; /* Ajuste no tamanho do título para mobile */
-            }
-            .hero-content .inline-block {
-                padding-left: 2rem;
-                padding-right: 2rem;
-            }
-        }
-    </style>
+/* NAVBAR */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;transition:background .45s,box-shadow .45s,transform .38s var(--ease);}
+#nav.solid{background:rgba(253,246,238,.96);backdrop-filter:blur(16px);box-shadow:0 2px 24px rgba(0,0,0,.08);}
+#nav.hidden{transform:translateY(-100%);}
+.nav-logo-img{height:52px;width:52px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.6);box-shadow:0 4px 14px rgba(0,0,0,.2);transition:transform .3s,border-color .4s;}
+#nav.solid .nav-logo-img{border-color:var(--gold);}
+.nav-logo-img:hover{transform:scale(1.07) rotate(5deg);}
+.nav-links{display:flex;gap:2rem;align-items:center;}
+.nav-links a{color:white;font-weight:500;font-size:.93rem;text-decoration:none;letter-spacing:.04em;text-shadow:0 2px 8px rgba(0,0,0,.35);position:relative;padding-bottom:2px;transition:color .2s;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--gold-lt);transition:width .3s var(--ease);}
+.nav-links a:hover::after{width:100%;}
+.nav-links a:hover{color:var(--gold-lt);text-shadow:none;}
+#nav.solid .nav-links a{color:var(--ink);text-shadow:none;}
+#nav.solid .nav-links a:hover{color:var(--gold);}
+#nav.solid .nav-links a::after{background:var(--gold);}
+.hbg{background:none;border:none;cursor:pointer;padding:8px;display:flex;flex-direction:column;gap:5px;}
+.hbg span{display:block;height:2px;border-radius:3px;background:white;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:background .3s,width .3s;}
+.hbg span:nth-child(1){width:24px;}
+.hbg span:nth-child(2){width:18px;}
+.hbg span:nth-child(3){width:24px;}
+.hbg:hover span:nth-child(2){width:24px;}
+#nav.solid .hbg span{background:var(--ink);box-shadow:none;}
+@media(max-width:768px){.nav-links{display:none;}}
+
+/* HERO */
+.hero{position:relative;height:100vh;min-height:600px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.hero-bg{position:absolute;inset:-25%;background:url('canecas.png') center/cover no-repeat;will-change:transform;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(170deg,rgba(10,5,0,.2) 0%,rgba(10,5,0,.55) 55%,rgba(30,12,0,.75) 100%);}
+#hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
+.particle{position:absolute;border-radius:50%;animation:pFloat var(--pd,8s) var(--pdelay,0s) ease-in-out infinite alternate;opacity:.35;}
+@keyframes pFloat{0%{transform:translate(0,0) scale(1);}50%{transform:translate(var(--px,15px),var(--py,-20px)) scale(1.15);}100%{transform:translate(var(--px2,-8px),var(--py2,10px)) scale(.9);}}
+.hero-content{position:relative;z-index:10;text-align:center;padding:2rem;animation:heroIn 1.3s .2s both;}
+@keyframes heroIn{from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);}}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-size:.78rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-lt);margin-bottom:1.4rem;}
+.hero-eyebrow span{display:block;width:28px;height:1px;background:var(--gold-lt);}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(3.5rem,9vw,7.5rem);font-weight:700;line-height:1.0;color:white;text-shadow:0 6px 40px rgba(0,0,0,.4);letter-spacing:-.01em;}
+.hero-h1 em{font-style:italic;color:var(--gold-lt);}
+.hero-desc{margin-top:1.2rem;font-size:clamp(.95rem,2vw,1.15rem);color:rgba(255,255,255,.75);letter-spacing:.03em;max-width:500px;margin-left:auto;margin-right:auto;}
+.hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.5rem;}
+.btn-primary{display:inline-flex;align-items:center;gap:.5rem;padding:.95rem 2.4rem;background:linear-gradient(135deg,var(--gold) 0%,var(--gold-lt) 100%);color:var(--ink);font-weight:700;font-size:.95rem;letter-spacing:.07em;text-transform:uppercase;border:none;border-radius:50px;cursor:pointer;text-decoration:none;box-shadow:0 8px 30px var(--gold-glow);transition:transform .3s var(--ease),box-shadow .3s;}
+.btn-primary:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 18px 50px var(--gold-glow);}
+.btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.95rem 2rem;background:transparent;color:white;font-weight:500;font-size:.95rem;border:1.5px solid rgba(255,255,255,.45);border-radius:50px;cursor:pointer;text-decoration:none;transition:background .3s,border-color .3s,transform .3s;}
+.btn-ghost:hover{background:rgba(255,255,255,.12);border-color:white;transform:translateY(-3px);}
+.scroll-hint{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.55);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;animation:scrollB 2.2s infinite;z-index:10;}
+@keyframes scrollB{0%,100%{transform:translateX(-50%) translateY(0);}55%{transform:translateX(-50%) translateY(10px);}}
+.scroll-mouse{width:20px;height:30px;border:1.5px solid rgba(255,255,255,.45);border-radius:10px;position:relative;}
+.scroll-mouse::after{content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);width:3px;height:6px;background:rgba(255,255,255,.6);border-radius:3px;animation:scrollDot 2.2s infinite;}
+@keyframes scrollDot{0%{top:5px;opacity:1;}100%{top:16px;opacity:0;}}
+
+/* SOBRE */
+#sobre{padding:7rem 2rem;background:white;position:relative;overflow:hidden;}
+.dc1{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,var(--rose-lt) 0%,transparent 70%);top:-200px;right:-180px;opacity:.5;pointer-events:none;}
+.dc2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,#FFF5C0 0%,transparent 70%);bottom:-150px;left:-150px;opacity:.4;pointer-events:none;}
+.sobre-inner{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:1fr 1.1fr;gap:5rem;align-items:center;}
+@media(max-width:860px){.sobre-inner{grid-template-columns:1fr;gap:3rem;}}
+.sobre-img-frame{position:relative;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.12);}
+.sobre-img-frame img{width:100%;height:440px;object-fit:cover;display:block;transition:transform 6s var(--ease);}
+.sobre-img-frame:hover img{transform:scale(1.04);}
+.sobre-badge{position:absolute;bottom:-20px;right:-20px;width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-lt));display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 10px 30px var(--gold-glow);animation:rotBadge 12s linear infinite;}
+.sobre-badge .num{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--ink);line-height:1;}
+.sobre-badge .lab{font-size:.6rem;font-weight:700;letter-spacing:.08em;color:var(--ink);text-align:center;line-height:1.3;}
+@keyframes rotBadge{0%,100%{transform:rotate(-3deg);}50%{transform:rotate(3deg);}}
+.sobre-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;}
+.sobre-tag::before{content:'';display:block;width:24px;height:1.5px;background:var(--gold);}
+.sobre-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;color:var(--ink);margin-bottom:1.2rem;}
+.sobre-h2 em{font-style:italic;color:var(--rose);}
+.sobre-p{color:var(--muted);line-height:1.85;font-size:1rem;margin-bottom:.8rem;}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem;}
+.stat-item{padding:1.2rem 1.4rem;border-radius:16px;background:var(--cream);border:1px solid rgba(201,151,58,.15);transition:transform .3s,box-shadow .3s;}
+.stat-item:hover{transform:translateY(-5px);box-shadow:0 14px 35px rgba(0,0,0,.07);}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:700;color:var(--gold);line-height:1;}
+.stat-lbl{font-size:.82rem;color:var(--muted);margin-top:.3rem;font-weight:500;}
+
+/* COMO FUNCIONA */
+#como-funciona{padding:7rem 2rem;background:linear-gradient(160deg,var(--ink) 0%,#2e1e10 100%);position:relative;overflow:hidden;}
+#como-funciona::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.como-title{text-align:center;margin-bottom:4rem;}
+.como-title h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:700;color:white;}
+.como-title p{color:rgba(255,255,255,.55);margin-top:.7rem;font-size:.98rem;}
+.steps{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;position:relative;}
+.steps::before{content:'';position:absolute;top:42px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),var(--gold),transparent);opacity:.35;}
+@media(max-width:768px){.steps::before{display:none;}}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:2.2rem 1.5rem;border-radius:24px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:background .3s,transform .3s,box-shadow .3s;}
+.step:hover{background:rgba(255,255,255,.09);transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.3);}
+.step-num{width:64px;height:64px;border-radius:50%;margin-bottom:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-lt));display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:700;color:var(--ink);box-shadow:0 8px 25px var(--gold-glow);transition:transform .3s;}
+.step:hover .step-num{transform:scale(1.12) rotate(5deg);}
+.step-icon{font-size:1.4rem;margin-bottom:.5rem;}
+.step h3{color:white;font-weight:700;font-size:1.05rem;margin-bottom:.5rem;}
+.step p{color:rgba(255,255,255,.5);font-size:.88rem;line-height:1.7;}
+
+/* PRODUTOS */
+#produtos{padding:7rem 2rem;background:var(--cream);position:relative;overflow:hidden;}
+.sec-label{display:flex;align-items:center;justify-content:center;gap:.6rem;font-size:.75rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem;}
+.sec-h2{text-align:center;font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3rem);font-weight:700;color:var(--ink);margin-bottom:.7rem;}
+.sec-sub{text-align:center;color:var(--muted);font-size:1rem;max-width:520px;margin:0 auto 3.5rem;}
+.prod-grid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.6rem;}
+.prod-card{height:340px;perspective:1200px;cursor:pointer;}
+.prod-card-inner{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .65s var(--ease);}
+.prod-card:hover .prod-card-inner{transform:rotateY(180deg);}
+.prod-face,.prod-back{position:absolute;inset:0;border-radius:22px;backface-visibility:hidden;overflow:hidden;}
+.prod-face{background:var(--card-bg);box-shadow:0 6px 24px rgba(0,0,0,.08);}
+.prod-face-img{width:100%;height:200px;object-fit:cover;}
+.prod-face-badge{position:absolute;top:12px;left:12px;padding:3px 10px;border-radius:20px;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:var(--gold);color:var(--ink);}
+.prod-face-body{padding:1.1rem 1.3rem;}
+.prod-face-body h3{font-size:1.05rem;font-weight:700;color:var(--ink);}
+.prod-face-body p{font-size:.83rem;color:var(--muted);margin-top:.3rem;line-height:1.5;}
+.prod-back{transform:rotateY(180deg);background:linear-gradient(145deg,var(--ink) 0%,#2e1e10 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem;text-align:center;}
+.prod-back-icon{font-size:3rem;margin-bottom:.8rem;}
+.prod-back h3{color:var(--gold-lt);font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;margin-bottom:.6rem;}
+.prod-back p{color:rgba(255,255,255,.65);font-size:.85rem;line-height:1.6;margin-bottom:1.5rem;}
+.prod-back-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.7rem 1.8rem;border-radius:40px;background:linear-gradient(135deg,var(--gold),var(--gold-lt));color:var(--ink);font-weight:700;font-size:.83rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;transition:transform .25s,box-shadow .25s;}
+.prod-back-btn:hover{transform:scale(1.05);box-shadow:0 8px 25px var(--gold-glow);}
+
+/* DEPOIMENTOS */
+#depoimentos{padding:7rem 2rem;background:white;position:relative;overflow:hidden;}
+#depoimentos::after{content:'"';font-family:'Cormorant Garamond',serif;position:absolute;font-size:30rem;color:var(--cream);top:-8rem;right:-2rem;line-height:1;pointer-events:none;z-index:0;}
+.depo-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;position:relative;z-index:1;}
+.depo-card{padding:2rem;border-radius:22px;background:var(--cream);border:1px solid rgba(201,151,58,.12);transition:transform .3s,box-shadow .3s;}
+.depo-card:hover{transform:translateY(-7px);box-shadow:0 20px 50px rgba(0,0,0,.08);}
+.depo-stars{color:var(--gold);font-size:1.05rem;margin-bottom:1rem;letter-spacing:.1em;}
+.depo-quote{color:var(--muted);line-height:1.8;font-size:.95rem;font-style:italic;padding-left:1rem;border-left:3px solid var(--gold-lt);}
+.depo-person{margin-top:1.4rem;display:flex;align-items:center;gap:.9rem;}
+.depo-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-lt));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:var(--ink);flex-shrink:0;}
+.depo-name{font-weight:700;font-size:.92rem;color:var(--ink);}
+.depo-city{font-size:.78rem;color:var(--muted);margin-top:.1rem;}
+
+/* ENCOMENDAS */
+#encomendas{padding:7rem 2rem;background:linear-gradient(160deg,var(--cream) 0%,#FFF5F8 100%);position:relative;overflow:hidden;}
+#encomendas::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--rose-lt) 0%,transparent 65%);bottom:-250px;left:-200px;opacity:.6;pointer-events:none;}
+.order-wrap{max-width:700px;margin:0 auto;background:white;border-radius:30px;padding:clamp(2rem,5vw,3.5rem);box-shadow:0 25px 70px rgba(0,0,0,.09);border:1px solid rgba(201,151,58,.12);position:relative;z-index:1;}
+.order-wrap .intro{font-family:'Cormorant Garamond',serif;font-size:1.15rem;color:var(--muted);text-align:center;margin-bottom:2rem;font-style:italic;}
+.fg{margin-bottom:1.4rem;}
+.fg label{display:block;font-weight:700;font-size:.83rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.fg input,.fg textarea{width:100%;padding:.88rem 1.1rem;border:1.5px solid #e8e0d8;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.97rem;color:var(--ink);background:#FDFAF7;outline:none;transition:border-color .3s,box-shadow .3s,transform .2s;}
+.fg input:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,151,58,.12);transform:translateY(-1px);}
+.fg textarea{resize:vertical;min-height:130px;line-height:1.6;}
+.btn-send{width:100%;padding:1.05rem;background:linear-gradient(135deg,var(--gold),var(--gold-lt) 60%,#e8c060);color:var(--ink);font-weight:700;font-size:1rem;font-family:'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:14px;cursor:pointer;box-shadow:0 10px 30px var(--gold-glow);transition:transform .3s var(--ease),box-shadow .3s;}
+.btn-send:hover{transform:translateY(-4px);box-shadow:0 18px 50px var(--gold-glow);}
+
+/* CONFETE */
+.confetti-piece{position:fixed;pointer-events:none;z-index:99995;animation:cFall var(--cf-dur,2.5s) var(--cf-delay,0s) ease-in forwards;}
+@keyframes cFall{0%{transform:translateY(-20px) rotate(0) scale(1);opacity:1;}100%{transform:translateY(110vh) rotate(720deg) scale(.5);opacity:0;}}
+
+/* FOOTER */
+footer{background:var(--ink);color:white;padding:5rem 2rem 2.5rem;position:relative;overflow:hidden;}
+footer::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='40' cy='40' r='30'/%3E%3C/g%3E%3C/svg%3E");pointer-events:none;}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:3rem;}
+@media(max-width:768px){.footer-inner{grid-template-columns:1fr;gap:2rem;}}
+.footer-brand .name{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:700;font-style:italic;color:var(--gold-lt);}
+.footer-brand .tag{font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:.2rem;}
+.footer-brand p{margin-top:1.2rem;color:rgba(255,255,255,.5);line-height:1.7;font-size:.9rem;max-width:280px;}
+.footer-social{display:flex;gap:.8rem;margin-top:1.5rem;}
+.footer-social a{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);transition:all .3s;}
+.footer-social a:hover{background:var(--gold);border-color:var(--gold);color:var(--ink);transform:translateY(-4px) scale(1.1);}
+.footer-col h4{font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem;}
+.footer-col a{display:block;color:rgba(255,255,255,.5);text-decoration:none;font-size:.92rem;margin-bottom:.6rem;transition:color .2s,padding-left .2s;}
+.footer-col a:hover{color:var(--gold-lt);padding-left:5px;}
+.footer-col .ci{display:flex;align-items:center;gap:.6rem;color:rgba(255,255,255,.5);font-size:.9rem;margin-bottom:.7rem;}
+.footer-col .ci-icon{color:var(--gold);font-size:1rem;}
+.footer-bottom{max-width:1100px;margin:3rem auto 0;padding-top:2rem;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-bottom p{font-size:.82rem;color:rgba(255,255,255,.3);}
+.footer-bf{font-size:1.3rem;animation:ldrFloat 3s ease-in-out infinite;}
+
+/* WHATSAPP FLOAT */
+#wa-float{position:fixed;bottom:2rem;right:2rem;z-index:700;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(37,211,102,.5);text-decoration:none;color:white;transition:transform .3s var(--ease),box-shadow .3s;animation:waPulse 2.5s infinite;}
+#wa-float:hover{transform:scale(1.12) rotate(-5deg);box-shadow:0 16px 50px rgba(37,211,102,.65);animation:none;}
+@keyframes waPulse{0%,100%{box-shadow:0 8px 30px rgba(37,211,102,.5);}50%{box-shadow:0 8px 30px rgba(37,211,102,.5),0 0 0 12px rgba(37,211,102,.1);}}
+.wa-tip{position:absolute;right:70px;background:rgba(0,0,0,.8);color:white;padding:.4rem .9rem;border-radius:8px;font-size:.8rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s;}
+#wa-float:hover .wa-tip{opacity:1;}
+
+/* REVEAL */
+.r{opacity:0;transform:translateY(36px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.rl{opacity:0;transform:translateX(-40px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.rr{opacity:0;transform:translateX(40px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.r.vis,.rl.vis,.rr.vis{opacity:1;transform:none;}
+.d1{transition-delay:.1s;}.d2{transition-delay:.18s;}.d3{transition-delay:.26s;}
+.d4{transition-delay:.34s;}.d5{transition-delay:.42s;}.d6{transition-delay:.5s;}
+
+/* BG BUTTERFLIES */
+#bg-bf{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bg-bf{position:absolute;opacity:0;animation:bgFly var(--bfd,20s) var(--bfk,0s) linear infinite;}
+@keyframes bgFly{0%{left:-8%;top:var(--bft);opacity:0;transform:scale(var(--bfs,1)) rotate(-5deg);}8%{opacity:.13;}92%{opacity:.13;}100%{left:110%;top:var(--bft);opacity:0;transform:scale(var(--bfs,1)) rotate(5deg);}}
+</style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- ATUALIZAÇÃO ESTRUTURAL: O container principal agora tem um fundo semitransparente para o efeito de vidro fosco -->
-    <div class="w-full max-w-7xl bg-white/80 backdrop-blur-sm shadow-lg page-container mx-auto">
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div id="bg-bf"></div>
 
-        <div class="relative overflow-hidden">
-            <header class="absolute top-0 left-0 w-full z-20">
-                <nav class="flex items-center justify-between p-6 md:p-10 lg:p-12">
-                    <div>
-                        <!-- ATUALIZADO: Logotipo agora está redondo e com tamanho ajustado -->
-                        <a href="#">
-                            <img src="logotipo.png" alt="Logotipo Taimimos" class="h-20 w-20 rounded-full object-cover border-2 border-white/50 shadow-md">
-                        </a>
-                    </div>
-                    <!-- Menu para Desktop -->
-                    <div class="items-center hidden space-x-8 text-lg md:flex">
-                        <a href="#inicio" class="font-medium text-white transition-colors drop-shadow-lg hover:text-yellow-300">Início</a>
-                        <a href="#sobre" class="font-medium text-white transition-colors drop-shadow-lg hover:text-yellow-300">Sobre</a>
-                        <a href="#produtos" class="font-medium text-white transition-colors drop-shadow-lg hover:text-yellow-300">Produtos</a>
-                        <a href="#contato" class="font-medium text-white transition-colors drop-shadow-lg hover:text-yellow-300">Contato</a>
-                    </div>
-                    <div class="flex items-center">
-                        <div class="w-8 h-8 bg-gray-200 border-2 rounded-full border-slate-400"></div>
-                        <!-- Botão do Menu Mobile -->
-                        <button id="mobile-menu-button" class="ml-4 md:hidden">
-                            <svg class="w-8 h-8 text-white drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                        </button>
-                    </div>
-                </nav>
-                <!-- Menu Mobile (oculto por padrão) -->
-                <div id="mobile-menu" class="hidden mt-4 text-center md:hidden px-6 pb-6 bg-black/50">
-                    <a href="#inicio" class="block py-3 text-lg font-medium text-white transition-colors hover:text-yellow-300">Início</a>
-                    <a href="#sobre" class="block py-3 text-lg font-medium text-white transition-colors hover:text-yellow-300">Sobre</a>
-                    <a href="#produtos" class="block py-3 text-lg font-medium text-white transition-colors hover:text-yellow-300">Produtos</a>
-                    <a href="#contato" class="block py-3 text-lg font-medium text-white transition-colors hover:text-yellow-300">Contato</a>
-                </div>
-            </header>
+<!-- LOADER -->
+<div id="loader">
+  <svg class="ldr-bf" width="170" height="145" viewBox="0 0 170 145">
+    <defs>
+      <radialGradient id="wA" cx="40%" cy="35%"><stop offset="0%" stop-color="#FDE68A"/><stop offset="55%" stop-color="#F5A0B5"/><stop offset="100%" stop-color="#c47fa0" stop-opacity=".85"/></radialGradient>
+      <radialGradient id="wB" cx="60%" cy="35%"><stop offset="0%" stop-color="#FDE68A"/><stop offset="55%" stop-color="#F5A0B5"/><stop offset="100%" stop-color="#c47fa0" stop-opacity=".85"/></radialGradient>
+      <radialGradient id="wC" cx="40%" cy="40%"><stop offset="0%" stop-color="#F5A0B5"/><stop offset="100%" stop-color="#c47fa0" stop-opacity=".85"/></radialGradient>
+      <radialGradient id="wD" cx="60%" cy="40%"><stop offset="0%" stop-color="#F5A0B5"/><stop offset="100%" stop-color="#c47fa0" stop-opacity=".85"/></radialGradient>
+    </defs>
+    <g class="ldr-wl"><ellipse cx="52" cy="47" rx="46" ry="40" fill="url(#wA)"/><ellipse cx="47" cy="42" rx="22" ry="18" fill="rgba(255,255,255,.28)"/><line x1="85" y1="68" x2="22" y2="22" stroke="rgba(232,184,75,.45)" stroke-width="1.4"/><line x1="85" y1="68" x2="10" y2="52" stroke="rgba(232,184,75,.3)" stroke-width="1"/></g>
+    <g class="ldr-wr"><ellipse cx="118" cy="47" rx="46" ry="40" fill="url(#wB)"/><ellipse cx="123" cy="42" rx="22" ry="18" fill="rgba(255,255,255,.28)"/><line x1="85" y1="68" x2="148" y2="22" stroke="rgba(232,184,75,.45)" stroke-width="1.4"/><line x1="85" y1="68" x2="160" y2="52" stroke="rgba(232,184,75,.3)" stroke-width="1"/></g>
+    <g class="ldr-wl"><ellipse cx="60" cy="100" rx="32" ry="26" fill="url(#wC)"/></g>
+    <g class="ldr-wr"><ellipse cx="110" cy="100" rx="32" ry="26" fill="url(#wD)"/></g>
+    <ellipse cx="85" cy="80" rx="5.5" ry="32" fill="#1E1410"/>
+    <ellipse cx="85" cy="62" rx="4" ry="8" fill="#2e1e10"/>
+    <path d="M81,46 Q70,28 75,18" stroke="#1E1410" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <circle cx="75" cy="17" r="3.5" fill="#C9973A"/>
+    <path d="M89,46 Q100,28 95,18" stroke="#1E1410" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <circle cx="95" cy="17" r="3.5" fill="#C9973A"/>
+    <ellipse cx="40" cy="36" rx="10" ry="7" fill="white" opacity=".18" transform="rotate(-20 40 36)"/>
+    <ellipse cx="130" cy="36" rx="10" ry="7" fill="white" opacity=".18" transform="rotate(20 130 36)"/>
+  </svg>
+  <div class="ldr-title">Taimimos</div>
+  <div class="ldr-sub">Presentes que ficam na memória</div>
+  <div class="ldr-bar"><div class="ldr-bar-fill"></div></div>
+</div>
 
-            <main id="inicio" class="relative z-10 hero-section-with-bg">
-                <div class="absolute inset-0 bg-black/30"></div> <!-- Overlay para legibilidade -->
-                
-                <div class="w-full h-full p-6 md:p-10 lg:p-12 z-10 flex items-center justify-center">
-                    <!-- Bloco de Texto centralizado -->
-                    <div class="hero-content text-center" data-aos="fade-up">
-                        <h1 class="text-5xl font-bold leading-tight text-white drop-shadow-xl lg:text-7xl">
-                            Presentes <br> Personalizados
-                        </h1>
-                        <a href="#encomendas" class="inline-block px-10 py-4 mt-8 text-xl font-bold text-gray-800 transition-transform transform bg-yellow-400 rounded-xl hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300">
-                            Compre Agora
-                        </a>
-                    </div>
-                </div>
-            </main>
-        </div>
-
-        <!-- As seções agora são transparentes, herdando o fundo do .page-container -->
-        <section id="sobre" class="px-6 py-16 md:px-10 lg:px-12">
-            <div class="max-w-4xl mx-auto text-center" data-aos="fade-up">
-                <h2 class="text-4xl font-bold brand-text">Sobre Nós</h2>
-                <p class="mt-4 text-lg text-gray-600">
-                    Na Taimimos, acreditamos que os melhores presentes são aqueles que contam uma história. Nascemos da paixão por criar momentos especiais e personalizados. Cada item é feito com carinho, pensando em eternizar suas memórias e celebrar suas conexões. Da escolha do material ao toque final, nossa dedicação é total para que você possa presentear com significado e exclusividade.
-                </p>
-            </div>
-        </section>
-
-        <section id="produtos" class="px-6 py-16 md:px-10 lg:px-12">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="mb-12 text-4xl font-bold text-center brand-text" data-aos="fade-up">Nossos Produtos</h2>
-                <!-- ATUALIZADO: Grid de produtos com mais itens -->
-                <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                    <!-- Produto 1 -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
-                        <img src="ca.png" alt="Caneca Personalizada" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Canecas</h3>
-                            <p class="mt-2 text-gray-600">Comece o dia com um sorriso. Personalize com fotos, frases ou o que sua imaginação mandar.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 2 -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
-                        <img src="camisa.png" alt="Camiseta Personalizada" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Camisetas</h3>
-                            <p class="mt-2 text-gray-600">Vista sua identidade. Crie camisetas com estampas únicas para você ou para o seu grupo.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 3 -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="300">
-                        <img src="bag.png" alt="Ecobag Personalizada" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Ecobags</h3>
-                            <p class="mt-2 text-gray-600">Leve seu estilo por onde for. Ecobags resistentes e personalizadas com a sua cara.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 4: Box Personalizados -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="400">
-                        <img src="Box.png" alt="Box Personalizado" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Box Personalizados</h3>
-                            <p class="mt-2 text-gray-600">Surpreenda com caixas temáticas recheadas de carinho e itens especiais.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 5: Cestas Personalizadas -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
-                        <img src="cestas.png" alt="Cesta Personalizada" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Cestas Personalizadas</h3>
-                            <p class="mt-2 text-gray-600">Cestas de café da manhã, happy hour e muito mais, montadas do seu jeito.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 6: Fotos Polaroid -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
-                        <img src="polaroid.png" alt="Fotos Polaroid" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Fotos Polaroid</h3>
-                            <p class="mt-2 text-gray-600">Revele suas memórias em um formato clássico e cheio de charme.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 7: Topos de Bolo -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="300">
-                        <img src="topodebolo.png" alt="Topo de Bolo" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Topos de Bolo</h3>
-                            <p class="mt-2 text-gray-600">O detalhe final que seu bolo precisa para ser inesquecível.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 8: Kit Festas -->
-                    <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="400">
-                        <img src="kitfesta.png" alt="Kit Festa" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Kit Festas</h3>
-                            <p class="mt-2 text-gray-600">Soluções completas com personalizados para sua celebração.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 9: Balões Personalizados -->
-                     <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="100">
-                        <img src="Balao.png" alt="Balões Personalizados" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Balões Personalizados</h3>
-                            <p class="mt-2 text-gray-600">Deixe sua festa mais colorida com balões feitos para a ocasião.</p>
-                        </div>
-                    </div>
-                    <!-- Produto 10: Cartão de Visitas -->
-                     <div class="overflow-hidden text-center transition-transform transform bg-white rounded-lg shadow-lg hover:-translate-y-2" data-aos="fade-up" data-aos-delay="200">
-                        <img src="cartaovisita.png" alt="Cartão de Visitas" class="object-cover w-full h-56">
-                        <div class="p-6">
-                            <h3 class="text-2xl font-semibold brand-text">Cartão de Visitas</h3>
-                            <p class="mt-2 text-gray-600">Apresente sua marca com estilo e profissionalismo.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ATUALIZAÇÃO DA SEÇÃO DE ENCOMENDA: Fundo destacado -->
-        <section id="encomendas" class="px-6 py-16 md:px-10 lg:px-12">
-            <div class="max-w-4xl mx-auto bg-white/95 p-8 md:p-12 rounded-2xl shadow-xl" data-aos="fade-up">
-                <h2 class="mb-8 text-4xl font-bold text-center brand-text">Faça sua Encomenda</h2>
-                <form id="orderForm" class="grid grid-cols-1 gap-6">
-                    <div>
-                        <label for="name" class="block text-lg font-medium text-gray-700">Seu Nome</label>
-                        <input type="text" id="name" name="name" required class="block w-full px-4 py-3 mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="email" class="block text-lg font-medium text-gray-700">Seu E-mail</label>
-                        <input type="email" id="email" name="email" required class="block w-full px-4 py-3 mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    </div>
-                    <div>
-                        <label for="message" class="block text-lg font-medium text-gray-700">Sua Mensagem (detalhe seu pedido)</label>
-                        <textarea id="message" name="message" rows="5" required class="block w-full px-4 py-3 mt-1 border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
-                    </div>
-                    <div class="text-center">
-                        <button type="submit" class="inline-block px-12 py-4 text-xl font-bold transition-transform transform brand-text brand-yellow rounded-xl hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300">
-                            Enviar Pedido
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-
-        <!-- ATUALIZAÇÃO DO RODAPÉ: transparente, cores da marca e sem Facebook -->
-        <footer id="contato" class="px-6 py-12 bg-transparent md:px-10 lg:px-12">
-            <div class="max-w-6xl mx-auto text-center">
-                <h2 class="text-3xl font-bold brand-text" data-aos="fade-up">Contato</h2>
-                <p class="mt-2 text-lg text-gray-600" data-aos="fade-up" data-aos-delay="100">Siga-nos nas redes sociais!</p>
-                <div class="flex justify-center mt-6 space-x-8">
-                    <!-- ATUALIZADO: Link do Instagram -->
-                    <a href="https://www.instagram.com/taimimospersonalizados/" target="_blank" class="brand-text transition-colors hover:text-blue-500" data-aos="zoom-in" data-aos-delay="200">
-                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-label="Instagram"><path fill-rule="evenodd" d="M12 2c2.72 0 3.057.012 4.122.06 1.065.048 1.791.218 2.427.465.66.254 1.218.598 1.772 1.153.554.554.898 1.112 1.153 1.772.247.636.417 1.362.465 2.427.048 1.065.06 1.402.06 4.122s-.012 3.057-.06 4.122c-.048 1.065-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772c-.554.554-1.112.898-1.772 1.153-.636.247-1.362.417-2.427.465-1.065.048-1.402.06-4.122.06s-3.057-.012-4.122-.06c-1.065-.048-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153c-.554-.554-.898-1.112-1.153-1.772-.247-.636-.417-1.362-.465-2.427C2.012 15.057 2 14.72 2 12s.012-3.057.06-4.122c.048 1.065.218-1.791.465-2.427.254-.66.598-1.218 1.153-1.772C4.232 3.12 4.79 2.776 5.45 2.522c.636-.247 1.362-.417-2.427-.465C8.943 2.012 9.28 2 12 2zm0 1.802c-2.67 0-2.987.01-4.042.059-1.009.046-1.634.208-2.126.4-.494.192-.913.43-1.32.837-.407.407-.645.826-.837 1.32-.192.492-.354 1.117-.4 2.126-.048 1.054-.059 1.372-.059 4.042s.01 2.987.059 4.042c.046 1.009.208 1.634.4 2.126.192.494.43.913.837 1.32.407.407.826.645 1.32.837.492.192 1.117.354 2.126.4 1.054.048 1.372.059 4.042.059s2.987-.01 4.042-.059c1.009-.046 1.634-.208 2.126-.4.494-.192-.913.43 1.32-.837.407-.407.645-.826.837-1.32.192-.492.354-1.117.4-2.126.048-1.054.059-1.372.059-4.042s-.01-2.987-.059-4.042c-.046-1.009-.208-1.634-.4-2.126-.192-.494-.43-.913-.837-1.32-.407-.407-.826-.645-1.32-.837-.492-.192-1.117-.354-2.126-.4C14.987 3.812 14.67 3.802 12 3.802zm0 2.996a5.196 5.196 0 100 10.392 5.196 5.196 0 000-10.392zm0 8.591a3.396 3.396 0 110-6.792 3.396 3.396 0 010 6.792zm6.406-8.304a1.2 1.2 0 11-2.4 0 1.2 1.2 0 012.4 0z" clip-rule="evenodd"></path></svg>
-                    </a>
-                    <!-- ATUALIZADO: Link do WhatsApp -->
-                    <a href="https://wa.me/5548999441002" target="_blank" class="brand-text transition-colors hover:text-blue-500" data-aos="zoom-in" data-aos-delay="400">
-                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24" aria-label="WhatsApp"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01s-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.368A9.343 9.343 0 014.632 4.632a9.343 9.343 0 0114.736 0 9.343 9.343 0 01-7.368 16.736zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"></path></svg>
-                    </a>
-                </div>
-                <div class="pt-8 mt-8 border-t border-slate-300">
-                    <p class="text-gray-500">&copy; 2024 Taimimos. Todos os direitos reservados.</p>
-                </div>
-            </div>
-        </footer>
+<!-- DRAWER -->
+<div id="veil"></div>
+<nav id="drawer">
+  <button class="drawer-x" id="drawerX">✕</button>
+  <div class="drawer-header">
+    <img src="logotipo.png" alt="Taimimos">
+    <div>
+      <div class="drawer-brand">Taimimos <small>Presentes Personalizados</small></div>
     </div>
+  </div>
+  <div class="drawer-nav">
+    <a href="#inicio"><span class="ico">🏠</span> Início</a>
+    <a href="#sobre"><span class="ico">💛</span> Sobre Nós</a>
+    <a href="#como-funciona"><span class="ico">✨</span> Como Funciona</a>
+    <a href="#produtos"><span class="ico">🎁</span> Produtos</a>
+    <a href="#depoimentos"><span class="ico">⭐</span> Depoimentos</a>
+    <a href="#encomendas"><span class="ico">📦</span> Faça seu Pedido</a>
+    <a href="#contato"><span class="ico">📞</span> Contato</a>
+  </div>
+  <div class="drawer-footer">
+    <a class="drawer-ig" href="https://www.instagram.com/taimimospersonalizados/" target="_blank">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      Instagram
+    </a>
+    <a class="drawer-wa" href="https://wa.me/5548999441002" target="_blank">
+      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01s-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.368A9.343 9.343 0 014.632 4.632a9.343 9.343 0 0114.736 0 9.343 9.343 0 01-7.368 16.736zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+</nav>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // ATUALIZADO: Força a página a carregar no topo
-        if (history.scrollRestoration) {
-            history.scrollRestoration = 'manual';
-        }
-        
-        // Inicializa o AOS (Animate on Scroll)
-        AOS.init({
-            duration: 800, // duração da animação em ms
-            once: true,    // se a animação deve acontecer apenas uma vez - ao rolar para baixo
-        });
+<!-- NAVBAR -->
+<nav id="nav">
+  <a href="#inicio"><img class="nav-logo-img" src="logotipo.png" alt="Taimimos"></a>
+  <div class="nav-links">
+    <a href="#inicio">Início</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#produtos">Produtos</a>
+    <a href="#depoimentos">Depoimentos</a>
+    <a href="#encomendas">Encomendar</a>
+  </div>
+  <button class="hbg" id="hbgBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
 
-        // --- Alternar Menu Mobile ---
-        const menuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        menuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div id="hero-particles"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span></span>Feito com amor<span></span></div>
+    <h1 class="hero-h1">Presentes<br><em>Únicos</em></h1>
+    <p class="hero-desc">Transformamos momentos em memórias eternas através de presentes totalmente personalizados</p>
+    <div class="hero-actions">
+      <a href="#encomendas" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M12 4v16m8-8H4"/></svg>
+        Fazer Pedido
+      </a>
+      <a href="#produtos" class="btn-ghost">Ver Produtos</a>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="scroll-mouse"></div><span>Role</span></div>
+</section>
 
-        // --- Envio de Formulário para Cliente de Email ---
-        document.getElementById('orderForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Previne o envio padrão do formulário
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="dc1"></div><div class="dc2"></div>
+  <div class="sobre-inner">
+    <div class="rl" style="position:relative;">
+      <div class="sobre-img-frame"><img src="canecas.png" alt="Produtos Taimimos"></div>
+      <div class="sobre-badge"><span class="num">+5</span><span class="lab">anos de<br>amor</span></div>
+    </div>
+    <div class="rr">
+      <div class="sobre-tag">Nossa história</div>
+      <h2 class="sobre-h2">Nascemos da paixão por criar<br><em>momentos especiais</em></h2>
+      <p class="sobre-p">Na Taimimos, cada item é feito com carinho, pensando em eternizar suas memórias e celebrar suas conexões únicas.</p>
+      <p class="sobre-p">Da escolha do material ao toque final, nossa dedicação é total para que você possa presentear com significado e exclusividade.</p>
+      <div class="stat-row">
+        <div class="stat-item r d1"><div class="stat-num">500+</div><div class="stat-lbl">Pedidos realizados</div></div>
+        <div class="stat-item r d2"><div class="stat-num">100%</div><div class="stat-lbl">Satisfação garantida</div></div>
+        <div class="stat-item r d3"><div class="stat-num">50+</div><div class="stat-lbl">Tipos de produtos</div></div>
+        <div class="stat-item r d4"><div class="stat-num">★ 4.9</div><div class="stat-lbl">Avaliação média</div></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const message = document.getElementById('message').value;
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="como-title r">
+    <h2>Como Funciona ✨</h2>
+    <p>Em 3 passos simples, seu presente personalizado chega até você</p>
+  </div>
+  <div class="steps">
+    <div class="step r d1"><div class="step-num">1</div><div class="step-icon">💬</div><h3>Fale com a gente</h3><p>Conte sua ideia pelo formulário ou WhatsApp. Quanto mais detalhes, melhor o resultado!</p></div>
+    <div class="step r d2"><div class="step-num">2</div><div class="step-icon">🎨</div><h3>Personalizamos para você</h3><p>Nossa equipe cria o design exclusivo e te envia uma prévia para aprovação antes de produzir.</p></div>
+    <div class="step r d3"><div class="step-num">3</div><div class="step-icon">🎁</div><h3>Receba com carinho</h3><p>Seu presente é embalado com amor e entregue pronto para encantar quem você ama.</p></div>
+  </div>
+</section>
 
-            const subject = `Pedido de Encomenda de ${name}`;
-            const body = `Olá, Taimimos!\n\nEu gostaria de fazer a seguinte encomenda:\n\n${message}\n\n--\nNome: ${name}\nE-mail: ${email}`;
+<!-- PRODUTOS -->
+<section id="produtos">
+  <div class="sec-label r">✦ Nosso catálogo ✦</div>
+  <h2 class="sec-h2 r d1">Nossos Produtos</h2>
+  <p class="sec-sub r d2">Passe o mouse — vire o cartão e descubra como encomendar!</p>
+  <div class="prod-grid">
 
-            // ATUALIZADO: Endereço de e-mail para receber os pedidos
-            const mailtoLink = `mailto:taianealexandre2016@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    <div class="prod-card r d1"><div class="prod-card-inner">
+      <div class="prod-face"><span class="prod-face-badge">Popular</span><img class="prod-face-img" src="ca.png" alt="Canecas"><div class="prod-face-body"><h3>Canecas</h3><p>Personalize com fotos, frases e muito amor.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">☕</div><h3>Canecas</h3><p>Comece o dia com um sorriso. Seu nome, sua foto, sua história em cada gole.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
 
-            // Abre o cliente de e-mail padrão do usuário
-            window.location.href = mailtoLink;
-        });
-    </script>
+    <div class="prod-card r d2"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="camisa.png" alt="Camisetas"><div class="prod-face-body"><h3>Camisetas</h3><p>Vista sua identidade com estampas únicas.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">👕</div><h3>Camisetas</h3><p>Crie para você, família ou grupo. Qualidade premium com o seu estilo.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d3"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="bag.png" alt="Ecobags"><div class="prod-face-body"><h3>Ecobags</h3><p>Leve seu estilo por onde for.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">👜</div><h3>Ecobags</h3><p>Resistentes e personalizadas. Sustentável e com muito estilo.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d4"><div class="prod-card-inner">
+      <div class="prod-face"><span class="prod-face-badge">Destaque</span><img class="prod-face-img" src="Box.png" alt="Box"><div class="prod-face-body"><h3>Box Personalizados</h3><p>Caixas temáticas recheadas de carinho.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">📦</div><h3>Box Personalizados</h3><p>Surpresas dentro de surpresas. Uma experiência única e inesquecível.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d1"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="cestas.png" alt="Cestas"><div class="prod-face-body"><h3>Cestas Personalizadas</h3><p>Café da manhã, happy hour e mais.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">🧺</div><h3>Cestas</h3><p>Montadas do seu jeito, com o que a pessoa amada mais gosta.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d2"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="polaroid.png" alt="Polaroid"><div class="prod-face-body"><h3>Fotos Polaroid</h3><p>Memórias em formato clássico e charmoso.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">📸</div><h3>Fotos Polaroid</h3><p>Revele seus momentos especiais num formato que nunca sai de moda.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d3"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="topodebolo.png" alt="Topos de Bolo"><div class="prod-face-body"><h3>Topos de Bolo</h3><p>O detalhe final para seu bolo ser inesquecível.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">🎂</div><h3>Topos de Bolo</h3><p>Com nome, tema e tudo que torna sua comemoração especial.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d4"><div class="prod-card-inner">
+      <div class="prod-face"><span class="prod-face-badge">Novo</span><img class="prod-face-img" src="kitfesta.png" alt="Kit Festas"><div class="prod-face-body"><h3>Kit Festas</h3><p>Soluções completas para celebrações únicas.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">🎉</div><h3>Kit Festas</h3><p>Tudo personalizado: balões, topos, convites, tags e muito mais!</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d1"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="Balao.png" alt="Balões"><div class="prod-face-body"><h3>Balões Personalizados</h3><p>Cores e mensagens para animar sua festa.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">🎈</div><h3>Balões</h3><p>Com nome, data ou mensagem especial. Deixe sua festa colorida!</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+    <div class="prod-card r d2"><div class="prod-card-inner">
+      <div class="prod-face"><img class="prod-face-img" src="cartaovisita.png" alt="Cartão de Visitas"><div class="prod-face-body"><h3>Cartão de Visitas</h3><p>Apresente-se com estilo e profissionalismo.</p></div></div>
+      <div class="prod-back"><div class="prod-back-icon">💼</div><h3>Cartão de Visitas</h3><p>Design exclusivo para sua marca brilhar. Primeira impressão inesquecível.</p><a href="#encomendas" class="prod-back-btn">Encomendar →</a></div>
+    </div></div>
+
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="sec-label r">✦ Quem ama, conta ✦</div>
+  <h2 class="sec-h2 r d1">O que dizem nossos clientes</h2>
+  <p class="sec-sub r d2">Cada presente entregue, uma história criada com amor</p>
+  <div class="depo-grid">
+    <div class="depo-card r d1"><div class="depo-stars">★★★★★</div><p class="depo-quote">Encomendei uma caneca para o aniversário da minha mãe e ela amou! A qualidade é incrível e o prazo super cumprido.</p><div class="depo-person"><div class="depo-avatar">AM</div><div><div class="depo-name">Ana Maria S.</div><div class="depo-city">Florianópolis, SC</div></div></div></div>
+    <div class="depo-card r d2"><div class="depo-stars">★★★★★</div><p class="depo-quote">O kit festa deixou a comemoração do meu filho ainda mais especial. Todo mundo perguntou onde comprei!</p><div class="depo-person"><div class="depo-avatar">CS</div><div><div class="depo-name">Carla Souza</div><div class="depo-city">São José, SC</div></div></div></div>
+    <div class="depo-card r d3"><div class="depo-stars">★★★★★</div><p class="depo-quote">Atendimento maravilhoso e os produtos chegaram embalados com muito capricho. Recomendo a todos!</p><div class="depo-person"><div class="depo-avatar">RB</div><div><div class="depo-name">Roberto Barros</div><div class="depo-city">Palhoça, SC</div></div></div></div>
+  </div>
+</section>
+
+<!-- ENCOMENDAS -->
+<section id="encomendas">
+  <div class="sec-label r">✦ Vamos criar juntos ✦</div>
+  <h2 class="sec-h2 r d1">Faça sua Encomenda</h2>
+  <p class="sec-sub r d2">Conte-nos sobre o presente dos seus sonhos e vamos realizá-lo para você</p>
+  <div class="order-wrap r d3">
+    <p class="intro">Cada pedido é tratado com atenção especial 🌸</p>
+    <form id="orderForm">
+      <div class="fg"><label for="name">Seu Nome</label><input type="text" id="name" required placeholder="Como podemos te chamar?"></div>
+      <div class="fg"><label for="email">Seu E-mail</label><input type="email" id="email" required placeholder="seuemail@exemplo.com"></div>
+      <div class="fg"><label for="message">Detalhes do Pedido</label><textarea id="message" required placeholder="Produto, personalização desejada, prazo, quantidade... quanto mais detalhes, melhor! ✨"></textarea></div>
+      <button type="submit" class="btn-send">✨ Enviar Pedido</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contato">
+  <div class="footer-inner">
+    <div class="footer-brand r">
+      <div class="name">Taimimos</div>
+      <div class="tag">Presentes Personalizados</div>
+      <p>Transformamos momentos em memórias eternas. Cada presente é feito com carinho especial para você.</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/taimimospersonalizados/" target="_blank" aria-label="Instagram">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://wa.me/5548999441002" target="_blank" aria-label="WhatsApp">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01s-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.368A9.343 9.343 0 014.632 4.632a9.343 9.343 0 0114.736 0 9.343 9.343 0 01-7.368 16.736zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col r d2">
+      <h4>Navegação</h4>
+      <a href="#inicio">Início</a>
+      <a href="#sobre">Sobre Nós</a>
+      <a href="#como-funciona">Como Funciona</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#encomendas">Faça um Pedido</a>
+    </div>
+    <div class="footer-col r d3">
+      <h4>Contato</h4>
+      <div class="ci"><span class="ci-icon">📱</span> (48) 99944-1002</div>
+      <div class="ci"><span class="ci-icon">📧</span> taianealexandre2016@gmail.com</div>
+      <div class="ci"><span class="ci-icon">📍</span> Santa Catarina, Brasil</div>
+      <div class="ci"><span class="ci-icon">🕐</span> Seg–Sex: 9h às 18h</div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Taimimos. Todos os direitos reservados. Feito com 💛</p>
+    <div class="footer-bf">🦋</div>
+  </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a id="wa-float" href="https://wa.me/5548999441002" target="_blank" aria-label="WhatsApp">
+  <svg width="26" height="26" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01s-.52.074-.792.372c-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 21.368A9.343 9.343 0 014.632 4.632a9.343 9.343 0 0114.736 0 9.343 9.343 0 01-7.368 16.736zM12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/></svg>
+  <span class="wa-tip">Fale conosco agora!</span>
+</a>
+
+<script>
+/* CURSOR */
+const cur = document.getElementById('cur');
+const curR = document.getElementById('cur-ring');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX+'px'; cur.style.top = e.clientY+'px';
+  curR.style.left = e.clientX+'px'; curR.style.top = e.clientY+'px';
+});
+document.querySelectorAll('a,button,.prod-card,.stat-item,.depo-card,.step').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width='18px'; cur.style.height='18px'; cur.style.background='var(--rose)'; curR.style.width='50px'; curR.style.height='50px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width='10px'; cur.style.height='10px'; cur.style.background='var(--gold)'; curR.style.width='34px'; curR.style.height='34px'; });
+});
+
+/* LOADER */
+if (history.scrollRestoration) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
+window.addEventListener('load', () => {
+  setTimeout(() => { document.getElementById('loader').classList.add('out'); revealCheck(); }, 2900);
+});
+
+/* DRAWER */
+const veil = document.getElementById('veil');
+const drawer = document.getElementById('drawer');
+const drawerX = document.getElementById('drawerX');
+const hbgBtn = document.getElementById('hbgBtn');
+const openD  = () => { drawer.classList.add('on'); veil.classList.add('on'); document.body.style.overflow='hidden'; };
+const closeD = () => { drawer.classList.remove('on'); veil.classList.remove('on'); document.body.style.overflow=''; };
+hbgBtn.addEventListener('click', openD);
+drawerX.addEventListener('click', closeD);
+veil.addEventListener('click', closeD);
+document.querySelectorAll('#drawer a').forEach(a => a.addEventListener('click', closeD));
+
+/* NAVBAR SMART HIDE */
+const nav = document.getElementById('nav');
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('solid', y > 50);
+  if (y > lastY + 8 && y > 220) nav.classList.add('hidden');
+  if (y < lastY - 5 || y < 100) nav.classList.remove('hidden');
+  lastY = y;
+  parallax();
+}, {passive:true});
+
+/* PARALLAX */
+const heroBg = document.getElementById('hero-bg');
+function parallax() { heroBg.style.transform = `translateY(${window.scrollY * 0.38}px)`; }
+
+/* REVEAL */
+const revEls = document.querySelectorAll('.r,.rl,.rr');
+function revealCheck() { revEls.forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight - 70) el.classList.add('vis'); }); }
+window.addEventListener('scroll', revealCheck, {passive:true});
+setTimeout(revealCheck, 200);
+
+/* HERO PARTICLES */
+const pc = document.getElementById('hero-particles');
+const pC = ['rgba(240,199,106,.5)','rgba(232,116,138,.4)','rgba(255,255,255,.25)','rgba(253,230,138,.45)'];
+for (let i=0;i<18;i++){
+  const p=document.createElement('div'); p.className='particle';
+  const s=6+Math.random()*22, dur=6+Math.random()*8;
+  p.style.cssText=`width:${s}px;height:${s}px;background:${pC[~~(Math.random()*pC.length)]};left:${Math.random()*100}%;top:${Math.random()*100}%;--pd:${dur}s;--pdelay:${Math.random()*4}s;--px:${(Math.random()-.5)*40}px;--py:${(Math.random()-.5)*40}px;--px2:${(Math.random()-.5)*30}px;--py2:${(Math.random()-.5)*25}px;`;
+  pc.appendChild(p);
+}
+
+/* CONFETE */
+function launchConfetti() {
+  const cols=['#C9973A','#F0C76A','#E8748A','#FADADD','#FDE68A','#fff'];
+  for(let i=0;i<80;i++){
+    const c=document.createElement('div'); c.className='confetti-piece';
+    c.style.cssText=`left:${10+Math.random()*80}%;background:${cols[~~(Math.random()*cols.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};--cf-dur:${2+Math.random()*2}s;--cf-delay:${Math.random()*.6}s;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),5000);
+  }
+}
+
+/* FORM */
+document.getElementById('orderForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value;
+  const email=document.getElementById('email').value;
+  const message=document.getElementById('message').value;
+  const subject=`Pedido de Encomenda — ${name}`;
+  const body=`Olá, Taimimos! 🌸\n\nGostaria de fazer a seguinte encomenda:\n\n${message}\n\n—\nNome: ${name}\nE-mail: ${email}`;
+  launchConfetti();
+  setTimeout(()=>{ window.location.href=`mailto:taianealexandre2016@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`; },600);
+});
+
+/* BG BUTTERFLIES */
+function bfSVG(c1,c2,c3,c4){return `<svg width="55" height="48" viewBox="0 0 140 120"><ellipse cx="45" cy="42" rx="40" ry="35" fill="${c1}" opacity=".75"/><ellipse cx="95" cy="42" rx="40" ry="35" fill="${c2}" opacity=".75"/><ellipse cx="52" cy="85" rx="27" ry="21" fill="${c3}" opacity=".75"/><ellipse cx="88" cy="85" rx="27" ry="21" fill="${c4}" opacity=".75"/><ellipse cx="70" cy="66" rx="5" ry="27" fill="#1E1410" opacity=".45"/></svg>`;}
+const bgBF=document.getElementById('bg-bf');
+const bfC=[['#FDE68A','#FDE68A','#F5A0B5','#F5A0B5'],['#F5A0B5','#F5A0B5','#FDE68A','#FDE68A'],['#d4f1d4','#a8dba8','#c8e6ff','#a0ccff'],['#fce4ec','#f8bbd9','#fff9c4','#fff3e0']];
+for(let i=0;i<7;i++){
+  const d=document.createElement('div'); d.className='bg-bf';
+  const cols=bfC[i%bfC.length], sc=.35+Math.random()*.45, top=8+Math.random()*72, dur=16+Math.random()*14, delay=Math.random()*18;
+  d.style.cssText=`--bft:${top}%;--bfd:${dur}s;--bfk:${delay}s;--bfs:${sc};`;
+  d.innerHTML=bfSVG(...cols); bgBF.appendChild(d);
+}
+</script>
 </body>
 </html>
-
